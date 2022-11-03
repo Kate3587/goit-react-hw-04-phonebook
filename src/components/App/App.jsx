@@ -1,95 +1,92 @@
-import { Component } from "react";
+import { useState, useEffect} from "react";
 import { nanoid } from 'nanoid';
 import ContactForm from '../ContactForm';
 import Filter from '../Filter';
 import ContactList from '../ContactList';
 import { PhonebookWrapper, MainBookTitle, BookTitle} from './App.styled';
 
-class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
+export const App = () => {
 
-  formSubmitHandler = data => {
-    const contactUniq = this.state.contacts.map(item => item.name).filter(name => name.toLowerCase() === data.name.toLowerCase())
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState('');
 
-    if (
-      contactUniq.length === 0
-    ) {
-      const newContact = {
-        id: nanoid(),
-        name: data.name,
-        number: data.number,
-      };
-      this.setState(prevState => (
-        {
-          contacts: [...prevState.contacts, newContact],
-        }))
-    } else {
-      alert(contactUniq + 'is alrady in contacts.')
-    }
-  };
+  const formSubmitHandler = data => {
+    //   const contactUniq = contacts.map(item => item.name).filter(name => name.toLowerCase() === data.name.toLowerCase())
+
+    //   if (
+    //     contactUniq.length === 0
+    //   ) {
+    //     // const newContact = {
+    //     //   id: nanoid(),
+    //     //   name: data.name,
+    //     //   number: data.number,
+    //     // };
+    //     setContacts(prevState => [...prevState, contacts])
+    //     // this.setState(prevState => (
+    //     //   {
+    //     //     contacts: [...prevState.contacts, newContact],
+    //     //   }))
+    //   } else {
+    //     alert(contactUniq + 'is alrady in contacts.')
+    //   }
+    // };
+
     
-  handleFilter = event => {
-    this.setState({
-      filter: event.target.value
-    })
-  };
+    const handleFilter = event => {
+      setFilter(event.target.value)
+    };
 
-  handleDeleteUser = (id) => {
-    this.setState(prevState => (
-      {
-        contacts: prevState.contacts.filter(item => item.id !== id)
-      }));
-  };
+    const handleDeleteUser = id => {
+      setContacts(prevState => prevState.filter(item => item.id !== id))
+    };
 
-  componentDidMount() {
-    const contactList = localStorage.getItem('contacts');
-    const parsedContact = JSON.parse(contactList);
+    // useEffect(() => {
+ 
+    // },[])
 
-    if (parsedContact) {
-      this.setState({
-        contacts: parsedContact
-      });
-    }
+    // componentDidMount() {
+    //   const parsedContact = JSON.parse(localStorage.getItem('contacts'));
 
-  }
+    //   if (parsedContact) {
+    //     this.setState({
+    //       contacts: parsedContact
+    //     });
+    //   }
 
-  componentDidUpdate(prevProps, prevState) {
+    // }
 
-    if (this.state.contacts !== prevState.contacts) {
+    // componentDidUpdate(prevProps, prevState) {
 
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
+    //   if (contacts !== contacts) {
+
+    //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    //   }
     
-  }
+    // };
+
   
-  render() {
-    const { contacts, filter } = this.state;
+
     const filteredUsers = contacts.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()));
 
     return (
       <PhonebookWrapper>
         <MainBookTitle>Phonebook</MainBookTitle>
         <ContactForm
-          onSubmit = {this.formSubmitHandler}
+          onSubmit={formSubmitHandler}
         />
         <div>
           <BookTitle>Contacts</BookTitle>
           <Filter
             inputLabel="Find contacts by name"
-            onChangeFilter={this.handleFilter}
+            onChangeFilter={handleFilter}
             value={filter}
           />
           <ContactList
             filterForUsers={filteredUsers}
-            onDeleteUsers ={this.handleDeleteUser}
-          />         
+            onDeleteUsers={handleDeleteUser}
+          />
         </div>
       </PhonebookWrapper>
     )
-  };
-};
-
-export default App;
+  }
+}
