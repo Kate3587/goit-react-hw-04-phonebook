@@ -6,16 +6,14 @@ import {ItemName, ContactBtn} from './ContactList.styled';
 const ContactList = ({ filterForUsers, onDeleteUsers }) => {
     return (
         <ul>
-        {
-            filterForUsers.map(({ name, number, id }) => (
-                <div
-                    key={nanoid()}>
-                    <ItemName>{name}: {number}</ItemName>
-                    <ContactBtn onClick={() => onDeleteUsers(id)} type="button">Delete</ContactBtn>
-                </div>
-            ))
-        }
-    </ul>
+        {filterForUsers.map(({ name, number, id }) => (
+            <div
+                key={nanoid()}>
+                <ItemName>{name}: {number}</ItemName>
+                <ContactBtn onClick={() => onDeleteUsers(id)} type="button">Delete</ContactBtn>
+            </div>
+        ))}
+        </ul>
     )
 };
 
@@ -28,4 +26,4 @@ ContactList.propTypes = {
         id: PropTypes.string,
     })),
     onDeleteUsers: PropTypes.func.isRequired,
-}
+};
