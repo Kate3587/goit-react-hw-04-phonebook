@@ -6,22 +6,26 @@ import Filter from '../Filter';
 import ContactList from '../ContactList';
 import { PhonebookWrapper, MainBookTitle, BookTitle } from './App.styled';
 
+const useLocalStorage = (key, defaultValue) => {
+  const [state, setState] = useState(() => {
+    return JSON.parse(window.localStorage.getItem(key)) ?? defaultValue;
+  })
+
+  useEffect(() => { 
+    window.localStorage.setItem(key, JSON.stringify(state));
+  }, [key, state])
+  return [state, setState]
+}
+
 export function App() {
 
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useLocalStorage('contacts', '');
   const [filter, setFilter] = useState('');
 
-  useEffect(() => {
-    const parsedContact = JSON.parse(localStorage.getItem(contacts));
-    if (parsedContact) {
-      setContacts(parsedContact);
-    }
-  }, []);
 
   useEffect(() => {
-    localStorage.setItem(contacts, JSON.stringify(contacts));
-  }, [contacts]);
-  
+
+  });
   
   const formSubmitHandler = (name, number) => {
     if (
@@ -42,13 +46,6 @@ export function App() {
       ];
     });
   };
-
-  // const filteredUsers = () => {
-  //   const normalisedFilter = filter.toLowerCase();
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(normalisedFilter)
-  //   );
-  // };
 
     
   const handleFilter = event => {
